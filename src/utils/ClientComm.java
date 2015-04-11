@@ -3,6 +3,7 @@ import java.io.*;
 import java.net.Socket;
 
 
+
 public class ClientComm extends Thread {
 
 	private PrintWriter out;
@@ -21,8 +22,26 @@ public class ClientComm extends Thread {
 		}
 	}
 	
-	public void send(String msg) {
+	public boolean send(String msg) {
 		out.println(msg);
+		
+		
+		try {
+			String response=in.readLine();
+			System.out.println(response);
+			return(response!="OK");
+				
+				
+			
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			return false;
+		}
+			
+	
+		
 	}
 	
 	public boolean isConnected() {

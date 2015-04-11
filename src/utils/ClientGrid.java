@@ -1,9 +1,9 @@
+package utils;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Line2D.Float;
 import javax.swing.*;
-import utils.ClientComm;
 import java.lang.Thread;
 
 public class ClientGrid extends JFrame implements MouseListener, MouseMotionListener{	
@@ -121,7 +121,9 @@ public class ClientGrid extends JFrame implements MouseListener, MouseMotionList
 		point = e.getPoint();
 		
 		if(comm != null && comm.isConnected()){
-			comm.send(Integer.toString((int)point.getX()) + " " + Integer.toString((int)point.getY()));
+			if(!comm.send(Integer.toString((int)point.getX()) + " " + Integer.toString((int)point.getY()))){
+				dispose();
+			}
 		}
 		
 	}
