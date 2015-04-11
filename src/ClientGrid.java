@@ -59,7 +59,25 @@ public class ClientGrid extends JFrame implements MouseListener, MouseMotionList
 				int height_mid = height / 2;
 				g.drawLine(0, height_mid, width, height_mid);
 				g.drawLine(width_mid, 0, width_mid, height);
-
+				
+				int offset = 10;
+				
+				// Axis labels
+				String understandString = "Understand";
+				String noUnderstandString = "Don't Understand";
+				String engagedString = "Engaged";
+				String notEngagedString = "Not engaged";
+				
+				g.drawChars(understandString.toCharArray(), 0, understandString.length(),
+						width_mid + offset, offset);
+				g.drawChars(noUnderstandString.toCharArray(), 0, noUnderstandString.length(),
+						width_mid + offset, height - offset);
+				
+				g.drawChars(engagedString.toCharArray(), 0, engagedString.length(),
+						width - 60, height_mid - offset);
+				g.drawChars(notEngagedString.toCharArray(), 0, notEngagedString.length(),
+						offset, height_mid - offset);
+				
 				if (point != null) {
 					// Lines to axes
 					int circX = (int) point.getX() - rad;
