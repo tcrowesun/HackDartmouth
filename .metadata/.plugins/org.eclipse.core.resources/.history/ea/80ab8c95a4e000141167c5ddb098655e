@@ -58,7 +58,7 @@ public class LecturerGUI {
 				null,
 				options,
 				options[0]);
-		if(choice == 0 || choice == JOptionPane.CLOSED_OPTION){
+		if(choice == 0){
 			socket.close();
 		}
 	}

@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 
 import javax.swing.*;
@@ -11,13 +10,10 @@ public class LecturerGUI {
 
 	private TrackerServer trackerServer;
 	private ServerSocket socket;
-	private String IPAddress;
-	private String portNumber;
 
 	private void display() throws IOException, InterruptedException {
-		InetAddress IP = InetAddress.getLocalHost();
-		IPAddress = IP.getHostAddress();
-		JTextField ipLabel = new JTextField("Your IP Address is: " + IPAddress);
+		InetAddress IP=InetAddress.getLocalHost();
+		JTextField ipLabel = new JTextField("Your IP Address is: " + IP.getHostAddress());
 		JTextField field2 = new JTextField("e.g. 4242");
 		JPanel panel = new JPanel(new GridLayout(0, 1));
 		panel.add(new JLabel(ipLabel.getText()));
@@ -26,9 +22,8 @@ public class LecturerGUI {
 		int result = JOptionPane.showConfirmDialog(null, panel, "Start",
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 		if (result == JOptionPane.OK_OPTION) {
-			portNumber = field2.getText();
-			System.out.println(ipLabel.getText()
-					+ " " + portNumber);
+			System.out.println( field1.getText()
+					+ " " + field2.getText());
 			this.socket = new ServerSocket(Integer.parseInt(field2.getText()));
 			trackerServer = new TrackerServer(socket);
 			(new Thread(trackerServer)).start();
@@ -36,7 +31,7 @@ public class LecturerGUI {
 				@Override
 				public void run() {
 					try {
-						(new LecturerGUI()).display2(socket, IPAddress, portNumber);
+						(new LecturerGUI()).display2(socket);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -47,18 +42,19 @@ public class LecturerGUI {
 		}
 	}
 
-	private void display2(ServerSocket socket, String IPAddress, String portNumber) throws IOException {
+	private void display2(ServerSocket socket) throws IOException {
 		//Custom button text
 		Object[] options = {"Finish"};
 		int choice = JOptionPane.showOptionDialog(null,
-				"Collecting Data...\nIP Address: " + IPAddress + "\nPort Number: " + portNumber + "\n\nClick below to end data collection",
-				"Control Panel",
-				JOptionPane.YES_NO_CANCEL_OPTION,
-				JOptionPane.PLAIN_MESSAGE,
-				null,
-				options,
-				options[0]);
-		if(choice == 0 || choice == JOptionPane.CLOSED_OPTION){
+		    "Collecting Data... \nClick below to end data collection",
+		    "Control Panel",
+		    JOptionPane.YES_NO_CANCEL_OPTION,
+		    JOptionPane.PLAIN_MESSAGE,
+		    null,
+		    options,
+		    options[0]);
+		
+		if(choice == 0){
 			socket.close();
 		}
 	}

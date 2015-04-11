@@ -51,14 +51,15 @@ public class LecturerGUI {
 		//Custom button text
 		Object[] options = {"Finish"};
 		int choice = JOptionPane.showOptionDialog(null,
-				"Collecting Data...\nIP Address: " + IPAddress + "\nPort Number: " + portNumber + "\n\nClick below to end data collection",
+				"Collecting Data... \nClick below to end data collection",
 				"Control Panel",
 				JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE,
 				null,
 				options,
 				options[0]);
-		if(choice == 0 || choice == JOptionPane.CLOSED_OPTION){
+
+		if(choice == 0){
 			socket.close();
 		}
 	}

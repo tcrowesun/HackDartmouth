@@ -35,6 +35,7 @@ public class TrackerServerCommunicator extends Thread {
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			out = new PrintWriter(sock.getOutputStream(), true);
 
+
 			// Keep getting and handling messages from the client
 			String msg;
 			while ((msg = in.readLine()) != null) {
