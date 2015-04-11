@@ -1,0 +1,13 @@
+
+public class TrackerInfo {
+	// Instance variables
+	private String[] dataArray;
+	
+	public TrackerInfo(String msg, int id) {
+		dataArray = msg.split(" ");
+	}
+	
+	public void update(DataTable dataTable) {
+		dataTable.add(id, Integer.parseInt(dataArray[0]),Integer.parseInt(dataArray[1])); ;
+	}
+}

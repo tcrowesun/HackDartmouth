@@ -1,0 +1,62 @@
+import java.net.*;
+import java.util.*;
+import java.io.*;
+
+
+public class TrackerServer {
+	private ServerSocket listen;						// for accepting connections
+	private ArrayList<TrackerServerCommunicator> comms;	// all the connections with clients
+	private static final int PORT_NUMBER = 4242;
+	private DataTable dataTable;
+	
+	public DataTable getDataTable() {
+		return dataTable;
+	}
+
+	public TrackerServer(ServerSocket listen) {
+		this.listen = listen;
+		//TODO create new file here to store final information. Should be instance var
+		this.globalId = 0;
+		comms = new ArrayList<TrackerServerCommunicator>();
+	}
+
+	/**
+	 * The usual loop of accepting connections and firing off new threads to handle them
+	 */
+	public void getConnections() throws IOException {
+		while (true) {
+			TrackerServerCommunicator comm = new TrackerServerCommunicator(listen.accept(), this, id++);
+			comm.setDaemon(true);
+			comm.start();
+			addCommunicator(comm);
+		}
+	}
+
+	/**
+	 * Adds the communicator to the list of current communicators
+	 */
+	public synchronized void addCommunicator(TrackerServerCommunicator comm) {
+		comms.add(comm);
+	}
+
+	/**
+	 * Removes the communicator from the list of current communicators
+	 */
+	public synchronized void removeCommunicator(TrackerServerCommunicator comm) {
+		comms.remove(comm);
+	}
+
+	/**
+	 * Sends the message from the one communicator to all (including the originator)
+	 */
+	public synchronized void broadcast(String msg) {
+		for (TrackerServerCommunicator comm : comms) {
+			comm.send(msg);
+		}
+	}
+	
+	public static void main(String[] args) throws Exception {
+		System.out.println("waiting for connections");
+		new TrackerServer(new ServerSocket(PORT_NUMBER)).getConnections();
+	}
+}

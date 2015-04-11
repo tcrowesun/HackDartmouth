@@ -1,0 +1,44 @@
+
+public class TrackerInfo {
+	// Instance variables
+	private String[] dataArray;
+	
+	/**
+	 * Initializes it from a string representation used for communication
+	 * @param msg
+	 */
+	public TrackerInfo(String msg) {
+		dataArray = msg.split(" ");
+	}
+	
+	/**
+	 * Helper function to get the ith token as an int
+	 * @param i
+	 * @return
+	 */
+	private int intToken(int i) {
+		return Integer.parseInt(dataArray[i]);
+	}
+
+	
+	/**
+	 * Updates the sketch according to the message
+	 * This may result in a modification of the message to be passed on
+	 */
+	public void update(DataTable dataTable) {
+		// YOUR CODE HERE
+		if (tokens[0].equals("add")) { // add idx type x1 y1 x2 y2 rgb
+			
+		}	
+	}
+
+	/**
+	 * Converts to a string representation for communication
+	 */
+	public String toString() {
+		// YOUR CODE HERE
+		String s = tokens[0];
+		for (int i=1; i<tokens.length; i++) s += " " + tokens[i];
+		return s;
+	}
+}

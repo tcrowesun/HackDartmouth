@@ -1,0 +1,56 @@
+import java.net.*;
+import java.util.*;
+import java.io.*;
+
+
+public class TrackerServer {
+	private ServerSocket listen;						// for accepting connections
+	private ArrayList<TrackerServerCommunicator> comms;	// all the connections with clients
+	
+	public TrackerServer(ServerSocket listen) {
+		this.listen = listen;
+		//TODO create new file here to store final information
+		
+		comms = new ArrayList<TrackerServerCommunicator>();
+	}
+
+	/**
+	 * The usual loop of accepting connections and firing off new threads to handle them
+	 */
+	public void getConnections() throws IOException {
+		while (true) {
+			SketchServerCommunicator comm = new SketchServerCommunicator(listen.accept(), this);
+			comm.setDaemon(true);
+			comm.start();
+			addCommunicator(comm);
+		}
+	}
+
+	/**
+	 * Adds the communicator to the list of current communicators
+	 */
+	public synchronized void addCommunicator(SketchServerCommunicator comm) {
+		comms.add(comm);
+	}
+
+	/**
+	 * Removes the communicator from the list of current communicators
+	 */
+	public synchronized void removeCommunicator(SketchServerCommunicator comm) {
+		comms.remove(comm);
+	}
+
+	/**
+	 * Sends the message from the one communicator to all (including the originator)
+	 */
+	public synchronized void broadcast(String msg) {
+		for (SketchServerCommunicator comm : comms) {
+			comm.send(msg);
+		}
+	}
+	
+	public static void main(String[] args) throws Exception {
+		System.out.println("waiting for connections");
+		new SketchServer(new ServerSocket(4242)).getConnections();
+	}
+}

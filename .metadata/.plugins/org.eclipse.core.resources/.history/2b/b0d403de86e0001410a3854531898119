@@ -1,0 +1,78 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+
+import javax.swing.*;
+
+
+public class LecturerGUI extends JFrame {	
+	private static String serverIP = "localhost";			
+	private static final int width = 800, height = 800;		// canvas size
+	private static final int PORT_NUMBER = 4242;
+	
+	// GUI components
+	private JComponent canvas, gui;
+
+	//TODO create server
+	private TrackerServer trackerServer;
+	
+	public LecturerGUI() throws IOException {
+		super("Lecturer GUI");
+
+		this.trackerServer = new TrackerServer(new ServerSocket(PORT_NUMBER));
+		
+		trackerServer.getConnections();
+
+		// Helpers to create the canvas and GUI (buttons, etc.)
+		setupCanvas();
+		setupGUI();
+
+		// Put the buttons and canvas together into the window
+		Container cp = getContentPane();
+		cp.setLayout(new FlowLayout());
+		cp.add(gui);
+
+		// Usual initialization
+		setLocationRelativeTo(null);
+		
+		// TODO handle window exit
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		pack();
+		setVisible(true);
+	}
+
+	/**
+	 * Creates a panel with all the buttons, etc.
+	 */
+	private void setupGUI() {
+
+		// Select drawing/recoloring color
+		// Following Oracle example
+		
+		// Delete object if it is selected
+		JButton deleteB = new JButton("delete");
+		deleteB.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if (selected != -1) {
+					comm.requestDelete(selected);
+					selected = -1;
+				}
+			}
+		});
+
+		// Put all the stuff into a panel
+		gui = new JPanel();
+		gui.setLayout(new FlowLayout());
+		gui.add(new JSeparator(SwingConstants.VERTICAL));
+		gui.add(deleteB);
+	}
+	
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				new LecturerGUI();
+			}
+		});	
+	}
+}

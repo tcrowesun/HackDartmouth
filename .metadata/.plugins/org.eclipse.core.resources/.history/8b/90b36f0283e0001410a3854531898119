@@ -1,0 +1,58 @@
+import java.io.*;
+import java.net.Socket;
+
+/**
+ * Handles communication between the server and one client, for TrackerServer
+ */
+public class TrackerServerCommunicator extends Thread {
+	private Socket sock;					// to talk with client
+	private BufferedReader in;				// from client
+	private PrintWriter out;				// to client
+	private TrackerServer server;			// handling communication for
+	private int id;
+
+	public TrackerServerCommunicator(Socket sock, TrackerServer server, int id) {
+		this.sock = sock;
+		this.server = server;
+	}
+
+	/**
+	 * Sends a message to the client
+	 * @param msg
+	 */
+	public void send(String msg) {
+		out.println(msg);
+	}
+
+	/**
+	 * Keeps listening for and handling (your code) messages from the client
+	 */
+	public void run() {
+		try {
+			System.out.println("someone connected");
+
+			// Communication channel
+			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			out = new PrintWriter(sock.getOutputStream(), true);
+
+
+			// Keep getting and handling messages from the client
+			String msg;
+			while ((msg = in.readLine()) != null) {
+				System.out.println(msg);
+				TrackerInfo m = new TrackerInfo(msg, id);
+				m.update(server.getDataTable()); 		// note that this may affect m itself...
+				server.broadcast(m.toString());		// so we convert m back to a string rather than using the original msg
+			}
+
+			// Clean up -- note that also remove self from server's list so it doesn't broadcast here
+			server.removeCommunicator(this);
+			out.close();
+			in.close();
+			sock.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,80 @@
+import java.awt.Color;
+
+/**
+ * Representation of a message for updating a sketch
+ * Sample solution to Dartmouth CS 10 PS-2, Winter 2014
+ * 
+ * @author Chris Bailey-Kellogg, Dartmouth CS 10, Winter 2014
+ */
+public class TrackerInfo {
+	// Instance variables
+	// YOUR CODE HERE
+	private String[] tokens;
+	
+	/**
+	 * Initializes it from a string representation used for communication
+	 * @param msg
+	 */
+	public Message(String msg) {
+		// YOUR CODE HERE
+		tokens = msg.split(" ");
+	}
+	
+	/**
+	 * Helper function to get the ith token as an int
+	 * @param i
+	 * @return
+	 */
+	private int intToken(int i) {
+		return Integer.parseInt(tokens[i]);
+	}
+	
+	/**
+	 * Helper function to get the ith token as a Color
+	 * @param i
+	 * @return
+	 */
+	private Color colorToken(int i) {
+		return new Color(Integer.parseInt(tokens[i]));
+	}
+	
+	/**
+	 * Updates the sketch according to the message
+	 * This may result in a modification of the message to be passed on
+	 */
+	public void update(Sketch sketch) {
+		// YOUR CODE HERE
+		if (tokens[0].equals("add")) { // add idx type x1 y1 x2 y2 rgb
+			Shape shape = null;
+			if (tokens[2].equals("ellipse")) shape = new Ellipse(intToken(3), intToken(4), intToken(5), intToken(6), colorToken(7));
+			else if (tokens[2].equals("rectangle")) shape = new Rectangle(intToken(3), intToken(4), intToken(5), intToken(6), colorToken(7));
+			else if (tokens[2].equals("segment")) shape = new Segment(intToken(3), intToken(4), intToken(5), intToken(6), colorToken(7));
+			else System.err.println("unrecognized shape");
+			int idx = intToken(1);
+			if (idx==-1) tokens[1] = Integer.toString(sketch.doAddEnd(shape));
+			else sketch.doAddAt(idx, shape);
+		}	
+		else if (tokens[0].equals("delete")) { // delete idx
+			sketch.doDelete(intToken(1));
+		}
+		else if (tokens[0].equals("recolor")) { // recolor idx rgb
+			sketch.doRecolor(intToken(1), colorToken(2));
+		}
+		else if (tokens[0].equals("moveTo")) { // moveTo idx x1 y2
+			sketch.doMoveTo(intToken(1), intToken(2), intToken(3));
+		}
+		else {
+			System.err.println("unrecognized command");
+		}
+	}
+
+	/**
+	 * Converts to a string representation for communication
+	 */
+	public String toString() {
+		// YOUR CODE HERE
+		String s = tokens[0];
+		for (int i=1; i<tokens.length; i++) s += " " + tokens[i];
+		return s;
+	}
+}

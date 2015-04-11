@@ -1,0 +1,24 @@
+
+public class TrackerInfo {
+	// Instance variables
+	private String[] dataArray;
+	
+	public TrackerInfo(String msg) {
+		dataArray = msg.split(" ");
+	}
+	
+
+	public void update(DataTable dataTable) {
+		dataTable.add(Integer.parseInt(dataArray[0]), Integer.parseInt(dataArray[1]),Integer.parseInt(dataArray[2])); ;
+	}
+
+	/**
+	 * Converts to a string representation for communication
+	 */
+	public String toString() {
+		// YOUR CODE HERE
+		String s = tokens[0];
+		for (int i=1; i<tokens.length; i++) s += " " + tokens[i];
+		return s;
+	}
+}

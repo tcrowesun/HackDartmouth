@@ -1,0 +1,169 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+
+import javax.swing.*;
+
+
+public class LecturerGUI extends JFrame {	
+	private static String serverIP = "localhost";			
+	private static final int width = 800, height = 800;		// canvas size
+	private static final int PORT_NUMBER = 4242;
+	
+	// GUI components
+	private JComponent canvas, gui;
+
+	//TODO create server
+	private TrackerServer trackerServer;
+	
+	public LecturerGUI() throws IOException {
+		super("Lecturer GUI");
+
+		this.trackerServer = new TrackerServer(new ServerSocket(PORT_NUMBER));
+		
+		trackerServer.getConnections();
+
+		// Helpers to create the canvas and GUI (buttons, etc.)
+		setupCanvas();
+		setupGUI();
+
+		// Put the buttons and canvas together into the window
+		Container cp = getContentPane();
+		cp.setLayout(new FlowLayout());
+		cp.add(gui);
+
+		// Usual initialization
+		setLocationRelativeTo(null);
+		
+		// TODO handle window exit
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		pack();
+		setVisible(true);
+	}
+
+	/**
+	 * Creates a panel with all the buttons, etc.
+	 */
+	private void setupGUI() {
+
+		// Select drawing/recoloring color
+		// Following Oracle example
+		
+		// Delete object if it is selected
+		JButton deleteB = new JButton("delete");
+		deleteB.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if (selected != -1) {
+					comm.requestDelete(selected);
+					selected = -1;
+				}
+			}
+		});
+
+		// Recolor object if it is selected
+		JButton recolorB = new JButton("recolor");
+		recolorB.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				// YOUR CODE HERE
+				if (selected != -1) {
+					comm.requestRecolor(selected, color);
+				}
+			}
+		});
+
+		// Put all the stuff into a panel
+		gui = new JPanel();
+		gui.setLayout(new FlowLayout());
+		gui.add(shapeB);
+		gui.add(chooseColorB);
+		gui.add(colorL);
+		gui.add(new JSeparator(SwingConstants.VERTICAL));
+		gui.add(drawingB);
+		gui.add(deleteB);
+		gui.add(recolorB);
+	}
+
+	private void setupCanvas() {
+		canvas = new JComponent() {
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				// Display the sketch
+				// Also display the object currently being drawn in this editor (not yet part of the sketch)
+				// YOUR CODE HERE
+				sketch.draw(g, selected);
+				if (drawing && current != null) {
+					current.draw(g);
+				}
+			}
+		};
+		
+		canvas.setPreferredSize(new Dimension(width, height));
+
+		canvas.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent event) {
+				point = event.getPoint();
+				// In drawing mode, start a new object;
+				// in editing mode, set selected according to which object contains the point
+				// YOUR CODE HERE
+				if (drawing) {
+					if (shape.equals("ellipse")) current = new Ellipse(point.x, point.y, point.x, point.y, color);
+					else if (shape.equals("rectangle")) current = new Rectangle(point.x, point.y, point.x, point.y, color);
+					else if (shape.equals("segment")) current = new Segment(point.x, point.y, point.x, point.y, color);
+				}
+				else {
+					dragged = false;
+					selected = sketch.container(point.x, point.y);
+					if (selected != -1) current = sketch.get(selected);
+				}
+				repaint();
+			}
+
+			public void mouseReleased(MouseEvent event) {
+				// Pass the update (added object or moved object) on to the server
+				// YOUR CODE HERE
+				if (drawing) {
+					comm.requestAdd(current);
+					current = null;
+				}
+				else if (selected != -1 && dragged) {
+					comm.requestMoveTo(selected, current.x1, current.y1);
+				}
+				repaint();
+			}
+		});		
+
+		canvas.addMouseMotionListener(new MouseAdapter() {
+			public void mouseDragged(MouseEvent event) {
+				// In drawing mode, update the other corner of the object;
+				// in editing mode, move the object by the difference between the current point and the previous one
+				// YOUR CODE HERE
+				if (drawing) {
+					current.setCorners(point.x, point.y, event.getPoint().x, event.getPoint().y);
+				}
+				else if (selected != -1) {
+					dragged = true;
+					current.moveBy(event.getPoint().x - point.x, event.getPoint().y - point.y);
+					point = event.getPoint();
+				}
+				repaint();
+			}				
+		});
+	}
+
+	/**
+	 * Getter for the sketch instance variable
+	 * @return
+	 */
+	public Sketch getSketch() {
+		return sketch;
+	}
+	
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				new Editor();
+			}
+		});	
+	}
+}

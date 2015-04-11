@@ -1,0 +1,15 @@
+
+public class TrackerInfo {
+	// Instance variables
+	private String[] dataArray;
+	private int id;
+	
+	public TrackerInfo(String msg, int id) {
+		dataArray = msg.split(" ");
+		this.id = id;
+	}
+	
+	public void update(DataTable dataTable) {
+		dataTable.add(id, Integer.parseInt(dataArray[0]),Integer.parseInt(dataArray[1])); ;
+	}
+}
