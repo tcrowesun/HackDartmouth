@@ -9,7 +9,7 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 	private static final long serialVersionUID = 1L;
 	
 	private static final int width = 400, height = 400;
-	
+	private static final int rad = 10;
 	
 	// GUI components
 	private JComponent canvas;
@@ -70,6 +70,36 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 				int height_mid = height / 2;
 				g.drawLine(0, height_mid, width, height_mid);
 				g.drawLine(width_mid, 0, width_mid, height);
+
+				if (point != null) {
+					// Lines to axes
+					int circX = (int) point.getX() - rad;
+					int circY = (int) point.getY() - rad;
+
+					// Color vertical line
+					if (circY + rad / 2 < height / 2) {
+						g.setColor(Color.GREEN);
+					} else if (circY + rad / 2 > height / 2) {
+						g.setColor(Color.RED);
+					} else {
+						g.setColor(Color.BLACK);
+					}
+					g.drawLine(circX + rad / 2, 0, circX + rad / 2, height);
+
+					// Color horizontal line
+					if (circX + rad / 2 < width / 2) {
+						g.setColor(Color.RED);
+					} else if (circX + rad / 2 > width / 2) {
+						g.setColor(Color.GREEN);
+					} else {
+						g.setColor(Color.BLACK);
+					}
+					g.drawLine(0, circY + rad / 2, width, circY + rad / 2);
+
+					// Black dot at mouse point
+					g.setColor(Color.BLACK);
+					g.fillOval(circX, circY, rad, rad);
+				}
 			}
 		};
 		canvas.setPreferredSize(new Dimension(width, height));
@@ -145,6 +175,6 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		point = e.getPoint();
-		
+		canvas.repaint();
 	}
 }
