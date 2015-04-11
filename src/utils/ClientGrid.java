@@ -63,7 +63,7 @@ public class ClientGrid extends JFrame implements MouseListener, MouseMotionList
 				String understandString = "Understand";
 				String noUnderstandString = "Don't Understand";
 				String engagedString = "Engaged";
-				String notEngagedString = "Not engaged";
+				String notEngagedString = "Not Engaged";
 				
 				g.drawChars(understandString.toCharArray(), 0, understandString.length(),
 						width_mid + offset, offset + 10);
