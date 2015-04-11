@@ -112,13 +112,21 @@ public class ClientGrid extends JFrame implements MouseListener, MouseMotionList
 		canvas.addMouseMotionListener(this);
 	}
 	
+	private static String reformat(Point p){
+		
+		double x=p.getX();
+		double y=p.getY();
+		return Integer.toString((int)(x-width/2)/2)+" " + Integer.toString((int)(width/2-y)/2);
+		
+		
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		point = e.getPoint();
 		
 		if(comm != null && comm.isConnected()){
-			if(!comm.send(Integer.toString((int)point.getX()) + " " + Integer.toString((int)point.getY()))){
+			if(!comm.send(reformat(point))){
 				dispose();
 			}
 		}
