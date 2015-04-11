@@ -7,13 +7,13 @@ public class ClientGrid extends JFrame implements MouseListener, MouseMotionList
 	private static final long serialVersionUID = 1L;
 	
 	private static final int width = 400, height = 400;
-	private static final int rad = 10;
+	private static final int rad = 7;
 	
 	// GUI components
 	private Container cp;
 	private JComponent canvas;
 	private Point point = null;
-
+	private Point prevPoint = null;
 	
 	private ClientComm comm;
 	
@@ -75,6 +75,15 @@ public class ClientGrid extends JFrame implements MouseListener, MouseMotionList
 				g.drawChars(notEngagedString.toCharArray(), 0, notEngagedString.length(),
 						offset, height_mid - offset);
 				
+				if (prevPoint != null) {
+					int prevCircX = (int) prevPoint.getX() - rad;
+					int prevCircY = (int) prevPoint.getY() - rad;
+					
+					// Previous point if applicable
+					g.setColor(Color.LIGHT_GRAY);
+					g.fillOval(prevCircX, prevCircY, rad, rad);
+				}
+				
 				if (point != null) {
 					// Lines to axes
 					int circX = (int) point.getX() - rad;
@@ -130,7 +139,9 @@ public class ClientGrid extends JFrame implements MouseListener, MouseMotionList
 				dispose();
 			}
 		}
-		
+	
+		prevPoint = point;
+		canvas.repaint();	
 	}
 
 	@Override
