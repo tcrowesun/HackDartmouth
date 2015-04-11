@@ -8,10 +8,11 @@ public class ClientComm extends Thread {
 	private PrintWriter out;
 	private BufferedReader in;
 	private Boolean connected = false;
+	private final static int PORT_NUMBER = 4242;
 
 	public ClientComm(String serverIP){
 		try {
-			Socket sock = new Socket(serverIP, 4242);
+			Socket sock = new Socket(serverIP, PORT_NUMBER);
 			out = new PrintWriter(sock.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			connected = true;

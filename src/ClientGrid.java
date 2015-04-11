@@ -146,7 +146,5 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 	public void mouseMoved(MouseEvent e) {
 		point = e.getPoint();
 		
-		System.out.println(point.getX() + " " + point.getY());
-		
 	}
 }
