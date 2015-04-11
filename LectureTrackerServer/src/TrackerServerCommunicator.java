@@ -42,7 +42,7 @@ public class TrackerServerCommunicator extends Thread {
 				System.out.println(msg);
 				TrackerInfo m = new TrackerInfo(msg, id);
 				m.update(server.getDataTable()); 		
-				server.broadcast(m.toString());
+				server.broadcast("OK");
 			}
 
 			// Clean up -- note that also remove self from server's list so it doesn't broadcast here

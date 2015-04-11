@@ -22,13 +22,11 @@ public class DataTable {
 
 		if (!this.table.containsKey(ID)) {
 			this.table.put(ID, new ArrayList<Entry>());
-			this.table.get(ID).add(new Entry(ID, X, Y, currentTime.getTime()));
+			this.table.get(ID).add(new Entry(ID, X, Y, currentTime.getTime()/1000));
 		}
 		else {	
-			this.table.get(ID).add(new Entry(ID, X, Y, currentTime.getTime()));
-
+			this.table.get(ID).add(new Entry(ID, X, Y, currentTime.getTime()/1000));
 		}
-
 	}
 
 	public void saveInfo(String path) throws IOException {
@@ -38,11 +36,9 @@ public class DataTable {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		for(int id : this.table.keySet()) {
 			for(Entry ent : this.table.get(id)) {
-				writer.write(id + "," + ent.X + "," + ent.Y + "," + ent.Time);
-			}
-			writer.close();
+				writer.write(id + "," + ent.X + "," + ent.Y + "," + ent.Time + "\n");
+			}	
 		}
-
-
+		writer.close();
 	}
 }

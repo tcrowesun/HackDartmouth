@@ -3,13 +3,13 @@ import java.util.*;
 import java.io.*;
 
 
-public class TrackerServer {
-	private ServerSocket listen;						// for accepting connections
+public class TrackerServer implements Runnable {
+	public ServerSocket listen;						// for accepting connections
 	private ArrayList<TrackerServerCommunicator> comms;	// all the connections with clients
 	private DataTable dataTable;
 	private int globalId;
 	public boolean serverAlive;
-	
+
 	public DataTable getDataTable() {
 		return dataTable;
 	}
@@ -18,8 +18,8 @@ public class TrackerServer {
 		this.listen = listen;
 		dataTable = new DataTable();
 		this.globalId = 0;
-		comms = new ArrayList<TrackerServerCommunicator>();
 		serverAlive = true;
+		comms = new ArrayList<TrackerServerCommunicator>();
 	}
 
 	/**
@@ -27,12 +27,18 @@ public class TrackerServer {
 	 */
 	public void getConnections() throws IOException {
 		while (serverAlive) {
-			TrackerServerCommunicator comm = new TrackerServerCommunicator(listen.accept(), this, globalId++);
-			comm.setDaemon(true);
-			comm.start();
-			addCommunicator(comm);
+			try {
+				TrackerServerCommunicator comm = 
+						new TrackerServerCommunicator(listen.accept(), this, globalId++);
+				comm.setDaemon(true);
+				comm.start();
+				addCommunicator(comm);
+			} 
+			catch (SocketException e) {
+				dataTable.saveInfo("./");
+				serverAlive = false;
+			}
 		}
-		// TODO Save
 	}
 
 	/**
@@ -55,6 +61,15 @@ public class TrackerServer {
 	public synchronized void broadcast(String msg) {
 		for (TrackerServerCommunicator comm : comms) {
 			comm.send(msg);
+		}
+	}
+
+	public void run() {
+		try {
+			getConnections();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
