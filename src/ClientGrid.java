@@ -62,7 +62,7 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 			topPanel.setLayout(new FlowLayout());
 			ipLabel = new JLabel("Enter IP Address");
 			ipLabel.setForeground(Color.darkGray);
-			ipField = new JTextField(30);
+			ipField = new JTextField(10);
 			ipField.addActionListener(this);
 			topPanel.add(ipLabel);
 			topPanel.add(ipField);
@@ -124,9 +124,11 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 		if (comm.isConnected()){
 			topPanel.remove(ipField);
 			ipLabel.setText("Success");
+			ipLabel.setForeground(Color.green);
 			repaint();
 		} else {
-			ipLabel.setText("<font color='red'>Connection Failed. Try Again<\font>");
+			ipLabel.setText("Connection Failed. Try Again");
+			ipLabel.setForeground(Color.red);
 			repaint();
 		}
 	}
