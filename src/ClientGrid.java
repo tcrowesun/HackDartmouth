@@ -14,7 +14,6 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 	// GUI components
 	private JComponent canvas;
 	private Point point = null;
-	
 	private JPanel topPanel;
 	private JTextField ipField;
 	private JLabel ipLabel;
@@ -24,9 +23,7 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 	public ClientGrid() {
 		super("Grid");
 		
-		//adding
 		setupIpLabel();
-		//adding
 		
 		// Helpers to create the canvas and GUI
 		setupCanvas();
@@ -35,10 +32,7 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 		Container cp = getContentPane();
 		cp.setLayout(new BorderLayout());
 		cp.add(canvas, BorderLayout.CENTER);
-		
-		//adding
 		cp.add(topPanel, BorderLayout.NORTH);
-		//adding
 		
 		// Top right of window
 		setLocationRelativeTo(null);
@@ -94,7 +88,11 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+		point = e.getPoint();
+		
+		if(comm != null && comm.isConnected()){
+			comm.send(Integer.toString((int)point.getX()) + " " + Integer.toString((int)point.getY()));
+		}
 		
 	}
 
