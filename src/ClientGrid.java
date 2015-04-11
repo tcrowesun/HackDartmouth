@@ -4,35 +4,35 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Line2D.Float;
 import javax.swing.*;
 import utils.ClientComm;
+import java.lang.Thread;
 
-public class ClientGrid extends JFrame implements ActionListener, MouseListener, MouseMotionListener{	
+public class ClientGrid extends JFrame implements MouseListener, MouseMotionListener{	
 	private static final long serialVersionUID = 1L;
 	
 	private static final int width = 400, height = 400;
 	private static final int rad = 10;
 	
 	// GUI components
+	private Container cp;
 	private JComponent canvas;
 	private Point point = null;
-	private JPanel topPanel;
-	private JTextField ipField;
-	private JLabel ipLabel;
+
 	
 	private ClientComm comm;
 	
-	public ClientGrid() {
+	public ClientGrid(ClientComm comm) {
 		super("Grid");
 		
-		setupIpLabel();
+		this.comm = comm;
+		
 		
 		// Helpers to create the canvas and GUI
 		setupCanvas();
 		
 		
-		Container cp = getContentPane();
+		cp = getContentPane();
 		cp.setLayout(new BorderLayout());
 		cp.add(canvas, BorderLayout.CENTER);
-		cp.add(topPanel, BorderLayout.NORTH);
 		
 		// Top right of window
 		setLocationRelativeTo(null);
@@ -49,17 +49,6 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 		setResizable(false);
 	}
 	
-	private void setupIpLabel(){
-			topPanel = new JPanel();
-			topPanel.setLayout(new FlowLayout());
-			ipLabel = new JLabel("Enter IP Address");
-			ipLabel.setForeground(Color.darkGray);
-			ipField = new JTextField(10);
-			ipField.addActionListener(this);
-			topPanel.add(ipLabel);
-			topPanel.add(ipField);
-			
-	}
 	
 	private void setupCanvas() {
 		canvas = new JComponent() {
@@ -108,13 +97,6 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 		canvas.addMouseMotionListener(this);
 	}
 	
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				new ClientGrid();
-			}
-		});	
-	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -148,22 +130,6 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		String ip = ipField.getText();
-		comm = new ClientComm(ip);
-		if (comm.isConnected()){
-			topPanel.remove(ipField);
-			ipLabel.setText("Success");
-			ipLabel.setForeground(Color.green);
-			repaint();
-		} else {
-			ipLabel.setText("Connection Failed. Try Again");
-			ipLabel.setForeground(Color.red);
-			repaint();
-		}
 	}
 
 	@Override
