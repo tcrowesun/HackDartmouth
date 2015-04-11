@@ -1,10 +1,7 @@
 package utils;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Line2D;
-import java.awt.geom.Line2D.Float;
 import javax.swing.*;
-import java.lang.Thread;
 
 public class ClientGrid extends JFrame implements MouseListener, MouseMotionListener{	
 	private static final long serialVersionUID = 1L;
@@ -69,7 +66,7 @@ public class ClientGrid extends JFrame implements MouseListener, MouseMotionList
 				String notEngagedString = "Not engaged";
 				
 				g.drawChars(understandString.toCharArray(), 0, understandString.length(),
-						width_mid + offset, offset);
+						width_mid + offset, offset + 10);
 				g.drawChars(noUnderstandString.toCharArray(), 0, noUnderstandString.length(),
 						width_mid + offset, height - offset);
 				
