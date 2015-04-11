@@ -55,6 +55,15 @@ public class TrackerServer implements Runnable {
 		comms.remove(comm);
 	}
 
+	/**
+	 * Sends the message from the one communicator to all (including the originator)
+	 */
+	public synchronized void broadcast(String msg) {
+		for (TrackerServerCommunicator comm : comms) {
+			comm.send(msg);
+		}
+	}
+
 	public void run() {
 		try {
 			getConnections();
