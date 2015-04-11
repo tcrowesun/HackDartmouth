@@ -1,22 +1,19 @@
+package utils;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Line2D;
-import java.awt.geom.Line2D.Float;
 import javax.swing.*;
-import utils.ClientComm;
-import java.lang.Thread;
 
 public class ClientGrid extends JFrame implements MouseListener, MouseMotionListener{	
 	private static final long serialVersionUID = 1L;
 	
 	private static final int width = 400, height = 400;
-	private static final int rad = 10;
+	private static final int rad = 7;
 	
 	// GUI components
 	private Container cp;
 	private JComponent canvas;
 	private Point point = null;
-
+	private Point prevPoint = null;
 	
 	private ClientComm comm;
 	
@@ -69,7 +66,7 @@ public class ClientGrid extends JFrame implements MouseListener, MouseMotionList
 				String notEngagedString = "Not engaged";
 				
 				g.drawChars(understandString.toCharArray(), 0, understandString.length(),
-						width_mid + offset, offset);
+						width_mid + offset, offset + 10);
 				g.drawChars(noUnderstandString.toCharArray(), 0, noUnderstandString.length(),
 						width_mid + offset, height - offset);
 				
@@ -77,6 +74,15 @@ public class ClientGrid extends JFrame implements MouseListener, MouseMotionList
 						width - 60, height_mid - offset);
 				g.drawChars(notEngagedString.toCharArray(), 0, notEngagedString.length(),
 						offset, height_mid - offset);
+				
+				if (prevPoint != null) {
+					int prevCircX = (int) prevPoint.getX() - rad;
+					int prevCircY = (int) prevPoint.getY() - rad;
+					
+					// Previous point if applicable
+					g.setColor(Color.LIGHT_GRAY);
+					g.fillOval(prevCircX, prevCircY, rad, rad);
+				}
 				
 				if (point != null) {
 					// Lines to axes
@@ -115,15 +121,27 @@ public class ClientGrid extends JFrame implements MouseListener, MouseMotionList
 		canvas.addMouseMotionListener(this);
 	}
 	
+	private static String reformat(Point p){
+		
+		double x=p.getX();
+		double y=p.getY();
+		return Integer.toString((int)(x-width/2)/2)+" " + Integer.toString((int)(width/2-y)/2);
+		
+		
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		point = e.getPoint();
 		
 		if(comm != null && comm.isConnected()){
-			comm.send(Integer.toString((int)point.getX()) + " " + Integer.toString((int)point.getY()));
+			if(!comm.send(reformat(point))){
+				dispose();
+			}
 		}
-		
+	
+		prevPoint = point;
+		canvas.repaint();	
 	}
 
 	@Override
