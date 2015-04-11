@@ -66,7 +66,7 @@ public class ClientGrid extends JFrame implements ActionListener, MouseListener,
 			private static final long serialVersionUID = 1L;
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				int width_mid = width / 2; 
+				int width_mid = width / 2;
 				int height_mid = height / 2;
 				g.drawLine(0, height_mid, width, height_mid);
 				g.drawLine(width_mid, 0, width_mid, height);
