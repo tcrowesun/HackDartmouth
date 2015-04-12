@@ -20,7 +20,6 @@ public class ClientComm extends Thread {
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			connected = true;
 		} catch (IOException e) {
-			System.err.println("Failed to connect to server socket");
 			if (sock != null) {
 				try {
 					sock.close();
