@@ -30,6 +30,7 @@ public class ClientGrid extends JFrame implements MouseListener, MouseMotionList
 		cp = getContentPane();
 		cp.setLayout(new BorderLayout());
 		cp.add(canvas, BorderLayout.CENTER);
+		cp.setBackground(Color.white);
 		
 		// Top right of window
 		setLocationRelativeTo(null);
