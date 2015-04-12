@@ -11,12 +11,10 @@ public class LecturerGUI {
 
 	private TrackerServer trackerServer;
 	private ServerSocket socket;
-	private String IPAddress;
-	private String portNumber;
 
 	private void display() throws IOException, InterruptedException {
 		InetAddress IP = InetAddress.getLocalHost();
-		IPAddress = IP.getHostAddress();
+		String IPAddress = IP.getHostAddress();
 		Object[] options = {"Start"};
 		int choice = JOptionPane.showOptionDialog(null,
 				"Click Start to start data collecting",
@@ -27,7 +25,7 @@ public class LecturerGUI {
 				options,
 				options[0]);
 		if(choice == 0 ){
-			portNumber = "4242";
+			String portNumber = "4242";
 			this.socket = new ServerSocket(Integer.parseInt(portNumber));
 			trackerServer = new TrackerServer(socket);
 			(new Thread(trackerServer)).start();

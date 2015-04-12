@@ -10,6 +10,6 @@ public class TrackerInfo {
 	}
 	
 	public void update(DataTable dataTable) {
-		dataTable.add(id, Integer.parseInt(dataArray[0]),Integer.parseInt(dataArray[1]));
+		dataTable.add(id, Integer.parseInt(dataArray[0]),Integer.parseInt(dataArray[1])); ;
 	}
 }

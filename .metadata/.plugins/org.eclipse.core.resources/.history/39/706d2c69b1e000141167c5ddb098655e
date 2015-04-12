@@ -27,8 +27,11 @@ public class LecturerGUI {
 				options,
 				options[0]);
 		if(choice == 0 ){
-			portNumber = "4242";
-			this.socket = new ServerSocket(Integer.parseInt(portNumber));
+
+			portNumber = field2.getText();
+			System.out.println(ipLabel.getText()
+					+ " " + portNumber);
+			this.socket = new ServerSocket(Integer.parseInt(field2.getText()));
 			trackerServer = new TrackerServer(socket);
 			(new Thread(trackerServer)).start();
 			EventQueue.invokeLater(new Runnable() {

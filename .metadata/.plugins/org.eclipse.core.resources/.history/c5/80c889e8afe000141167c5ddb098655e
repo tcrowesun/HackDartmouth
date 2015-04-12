@@ -14,7 +14,6 @@ public class TrackerServerCommunicator extends Thread {
 	public TrackerServerCommunicator(Socket sock, TrackerServer server, int id) {
 		this.sock = sock;
 		this.server = server;
-		this.id = id;
 	}
 
 	/**

@@ -29,8 +29,7 @@ public class TrackerServer implements Runnable {
 		while (serverAlive) {
 			try {
 				TrackerServerCommunicator comm = 
-						new TrackerServerCommunicator(listen.accept(), this, globalId);
-				globalId++;
+						new TrackerServerCommunicator(listen.accept(), this, globalId++);
 				comm.setDaemon(true);
 				comm.start();
 				addCommunicator(comm);

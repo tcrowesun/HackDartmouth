@@ -17,18 +17,19 @@ public class LecturerGUI {
 	private void display() throws IOException, InterruptedException {
 		InetAddress IP = InetAddress.getLocalHost();
 		IPAddress = IP.getHostAddress();
-		Object[] options = {"Start"};
-		int choice = JOptionPane.showOptionDialog(null,
-				"Click Start to start data collecting",
-				"Control Panel",
-				JOptionPane.YES_NO_CANCEL_OPTION,
-				JOptionPane.PLAIN_MESSAGE,
-				null,
-				options,
-				options[0]);
-		if(choice == 0 ){
-			portNumber = "4242";
-			this.socket = new ServerSocket(Integer.parseInt(portNumber));
+		JTextField ipLabel = new JTextField("Your IP Address is: " + IPAddress);
+		JTextField field2 = new JTextField("e.g. 4242");
+		JPanel panel = new JPanel(new GridLayout(0, 1));
+		panel.add(new JLabel(ipLabel.getText()));
+		panel.add(new JLabel("Enter Port Number:"));
+		panel.add(field2);
+		int result = JOptionPane.showConfirmDialog(null, panel, "Start",
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		if (result == JOptionPane.OK_OPTION) {
+			portNumber = field2.getText();
+			System.out.println(ipLabel.getText()
+					+ " " + portNumber);
+			this.socket = new ServerSocket(Integer.parseInt(field2.getText()));
 			trackerServer = new TrackerServer(socket);
 			(new Thread(trackerServer)).start();
 			EventQueue.invokeLater(new Runnable() {
@@ -41,6 +42,8 @@ public class LecturerGUI {
 					}
 				}
 			});
+		} else {
+			System.out.println("Cancelled");
 		}
 	}
 
@@ -48,7 +51,7 @@ public class LecturerGUI {
 		//Custom button text
 		Object[] options = {"Finish"};
 		int choice = JOptionPane.showOptionDialog(null,
-				"Collecting Data...\nIP Address: " + IPAddress + "\n\nClick below to end data collection",
+				"Collecting Data...\nIP Address: " + IPAddress + "\nPort Number: " + portNumber + "\n\nClick below to end data collection",
 				"Control Panel",
 				JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE,
