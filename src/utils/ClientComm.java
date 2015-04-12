@@ -11,14 +11,25 @@ public class ClientComm extends Thread {
 	private Boolean connected = false;
 	private final static int PORT_NUMBER = 4242;
 
-	public ClientComm(String serverIP){
-		try {
-			Socket sock = new Socket(serverIP, PORT_NUMBER);
+	public ClientComm(String serverIP){		
+		Socket sock = null;
+		try {	
+			sock = new Socket(serverIP, PORT_NUMBER);
 			out = new PrintWriter(sock.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			connected = true;
 		} catch (IOException e) {
 			System.err.println("Failed to connect to server socket");
+		}
+		finally{
+			if (sock != null) {
+				try {
+					sock.close();
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
@@ -38,6 +49,8 @@ public class ClientComm extends Thread {
 			//e.printStackTrace();
 			return false;
 		}
+
+		
 			
 	
 		
