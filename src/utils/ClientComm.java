@@ -28,8 +28,7 @@ public class ClientComm extends Thread {
 		
 		try {
 			String response=in.readLine();
-			System.out.println(response);
-			return(response!="OK");
+			return(response.equals("OK"));
 				
 				
 			
