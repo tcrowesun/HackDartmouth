@@ -11,7 +11,7 @@ public class InputBox extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final int width = 200, height = 100;
+	private static final int width = 200, height = 75;
 	
 	private Container cp;
 	private JTextField ipField;
@@ -23,15 +23,16 @@ public class InputBox extends JFrame implements ActionListener{
 		super("IP Information");
 		
 		ipLabel = new JLabel("Enter IP Address");
-		ipLabel.setForeground(Color.darkGray);
+		ipLabel.setForeground(Color.white);
 		ipField = new JTextField(10);
 		ipField.addActionListener(this);
 
 		
 		cp = getContentPane();
 		cp.setLayout(new FlowLayout());
-		cp.add(ipField);
 		cp.add(ipLabel);
+		cp.add(ipField);
+		cp.setBackground(Color.black);
 		cp.setPreferredSize(new Dimension(width, height));
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
