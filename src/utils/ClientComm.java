@@ -10,9 +10,10 @@ public class ClientComm extends Thread {
 	private BufferedReader in;
 	private Boolean connected = false;
 	private final static int PORT_NUMBER = 4242;
+	private Socket sock;
 
 	public ClientComm(String serverIP){		
-		Socket sock = null;
+		sock = null;
 		try {	
 			sock = new Socket(serverIP, PORT_NUMBER);
 			out = new PrintWriter(sock.getOutputStream(), true);
@@ -20,17 +21,16 @@ public class ClientComm extends Thread {
 			connected = true;
 		} catch (IOException e) {
 			System.err.println("Failed to connect to server socket");
-		}
-		finally{
 			if (sock != null) {
 				try {
 					sock.close();
 				}
-				catch (IOException e) {
-					e.printStackTrace();
+				catch (IOException ex) {
+					ex.printStackTrace();
 				}
 			}
 		}
+
 	}
 	
 	public boolean send(String msg) {
@@ -47,12 +47,17 @@ public class ClientComm extends Thread {
 		catch (Exception e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
+			if (sock != null) {
+				try {
+					sock.close();
+				}
+				catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
 			return false;
 		}
 
-		
-			
-	
 		
 	}
 	
