@@ -41,7 +41,7 @@ public class TrackerServer implements Runnable {
 				serverAlive = false;
 			}
 		}
-		String[] cmd = {"/usr/bin/python ./Visualizer.py " + fileName};
+		String[] cmd = {"python ./Visualizer.py " + fileName};
 		Runtime.getRuntime().exec(cmd);
 	}
 
