@@ -40,9 +40,7 @@ public class ClientComm extends Thread {
 		try {
 			String response=in.readLine();
 			return(response.equals("OK"));
-				
-				
-			
+
 		}
 		catch (Exception e) {
 			// TODO Auto-generated catch block
