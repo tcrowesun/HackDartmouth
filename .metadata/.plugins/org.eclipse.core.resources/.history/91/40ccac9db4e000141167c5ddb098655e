@@ -1,0 +1,177 @@
+package utils;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class ClientGrid extends JFrame implements MouseListener, MouseMotionListener{	
+	private static final long serialVersionUID = 1L;
+	
+	private static final int width = 400, height = 400;
+	private static final int rad = 7;
+	
+	// GUI components
+	private Container cp;
+	private JComponent canvas;
+	private Point point = null;
+	private Point prevPoint = null;
+	
+	private ClientComm comm;
+	
+	public ClientGrid(ClientComm comm) {
+		super("Grid");
+		
+		this.comm = comm;
+		
+		
+		// Helpers to create the canvas and GUI
+		setupCanvas();
+		
+		
+		cp = getContentPane();
+		cp.setLayout(new BorderLayout());
+		cp.add(canvas, BorderLayout.CENTER);
+		cp.setBackground(Color.white);
+		
+		// Top right of window
+		setLocationRelativeTo(null);
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
+        Rectangle rect = defaultScreen.getDefaultConfiguration().getBounds();
+        int x = (int) rect.getMaxX() - width;
+        int y = 0;
+        setLocation(x, y);
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		pack();
+		setVisible(true);
+		setResizable(false);
+	}
+	
+	
+	private void setupCanvas() {
+		canvas = new JComponent() {
+			private static final long serialVersionUID = 1L;
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				int width_mid = width / 2;
+				int height_mid = height / 2;
+				g.drawLine(0, height_mid, width, height_mid);
+				g.drawLine(width_mid, 0, width_mid, height);
+				
+				int offset = 10;
+				
+				// Axis labels
+				String understandString = "Understand";
+				String noUnderstandString = "Don't Understand";
+				String engagedString = "Engaged";
+				String notEngagedString = "Not Engaged";
+				
+				g.drawChars(understandString.toCharArray(), 0, understandString.length(),
+						width_mid + offset, offset + 10);
+				g.drawChars(noUnderstandString.toCharArray(), 0, noUnderstandString.length(),
+						width_mid + offset, height - offset);
+				
+				g.drawChars(engagedString.toCharArray(), 0, engagedString.length(),
+						width - 60, height_mid - offset);
+				g.drawChars(notEngagedString.toCharArray(), 0, notEngagedString.length(),
+						offset, height_mid - offset);
+				
+				if (prevPoint != null) {
+					int prevCircX = (int) prevPoint.getX() - rad;
+					int prevCircY = (int) prevPoint.getY() - rad;
+					
+					// Previous point if applicable
+					g.setColor(Color.LIGHT_GRAY);
+					g.fillOval(prevCircX, prevCircY, rad, rad);
+				}
+				
+				if (point != null) {
+					// Lines to axes
+					int circX = (int) point.getX() - rad;
+					int circY = (int) point.getY() - rad;
+
+					// Color vertical line
+					if (circY + rad / 2 < height / 2) {
+						g.setColor(Color.GREEN);
+					} else if (circY + rad / 2 > height / 2) {
+						g.setColor(Color.RED);
+					} else {
+						g.setColor(Color.BLACK);
+					}
+					g.drawLine(circX + rad / 2, 0, circX + rad / 2, height);
+
+					// Color horizontal line
+					if (circX + rad / 2 < width / 2) {
+						g.setColor(Color.RED);
+					} else if (circX + rad / 2 > width / 2) {
+						g.setColor(Color.GREEN);
+					} else {
+						g.setColor(Color.BLACK);
+					}
+					g.drawLine(0, circY + rad / 2, width, circY + rad / 2);
+
+					// Black dot at mouse point
+					g.setColor(Color.BLACK);
+					g.fillOval(circX, circY, rad, rad);
+				}
+			}
+		};
+		canvas.setPreferredSize(new Dimension(width, height));
+		canvas.addMouseListener(this);		
+		canvas.addMouseMotionListener(this);
+	}
+	
+	private static String reformat(Point p){	
+		double x=p.getX();
+		double y=p.getY();
+		return Integer.toString((int)(x-width/2)/2)+" " + Integer.toString((int)(width/2-y)/2);	
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		point = e.getPoint();
+		if(comm != null && comm.isConnected()){
+			if(!comm.send(reformat(point))){
+				dispose();
+			}
+		}
+		prevPoint = point;
+		canvas.repaint();	
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		point = e.getPoint();
+		canvas.repaint();
+	}
+}

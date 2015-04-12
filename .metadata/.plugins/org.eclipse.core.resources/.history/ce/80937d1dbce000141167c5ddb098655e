@@ -26,7 +26,6 @@ public class TrackerServer implements Runnable {
 	 * The usual loop of accepting connections and firing off new threads to handle them
 	 */
 	public void getConnections() throws IOException {
-		String fileName = "";
 		while (serverAlive) {
 			try {
 				TrackerServerCommunicator comm = 
@@ -37,14 +36,10 @@ public class TrackerServer implements Runnable {
 				addCommunicator(comm);
 			} 
 			catch (SocketException e) {
-				fileName = dataTable.saveInfo("./");
+				dataTable.saveInfo("./");
 				serverAlive = false;
 			}
 		}
-		ProcessBuilder builder = new ProcessBuilder("python visualizer.py ./" + fileName);
-		builder.start();
-		
-
 	}
 
 	/**

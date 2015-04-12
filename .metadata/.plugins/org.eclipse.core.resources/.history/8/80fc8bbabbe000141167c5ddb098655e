@@ -29,10 +29,9 @@ public class DataTable {
 		}
 	}
 
-	public String saveInfo(String path) throws IOException {
+	public void saveInfo(String path) throws IOException {
 		Date currentTime = new Date();
-		String fileName = path + "Stats_" + currentTime.getTime();
-		File file = new File(fileName);
+		File file = new File(path + "Stats_" + currentTime.getTime());
 		file.createNewFile();
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		for(int id : this.table.keySet()) {
@@ -41,6 +40,5 @@ public class DataTable {
 			}	
 		}
 		writer.close();
-		return fileName;
 	}
 }

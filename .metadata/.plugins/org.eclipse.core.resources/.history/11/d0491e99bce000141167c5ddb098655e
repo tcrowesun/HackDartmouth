@@ -41,9 +41,7 @@ public class TrackerServer implements Runnable {
 				serverAlive = false;
 			}
 		}
-		ProcessBuilder builder = new ProcessBuilder("python visualizer.py ./" + fileName);
-		builder.start();
-		
+		ProcessBuilder builder = new ProcessBuilder("")
 
 	}
 

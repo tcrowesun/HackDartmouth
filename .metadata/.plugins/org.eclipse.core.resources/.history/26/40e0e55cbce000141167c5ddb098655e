@@ -37,13 +37,11 @@ public class TrackerServer implements Runnable {
 				addCommunicator(comm);
 			} 
 			catch (SocketException e) {
-				fileName = dataTable.saveInfo("./");
+				String fileName = dataTable.saveInfo("./");
 				serverAlive = false;
 			}
 		}
-		ProcessBuilder builder = new ProcessBuilder("python visualizer.py ./" + fileName);
-		builder.start();
-		
+		ProcessBuilder builder = new ProcessBuilder("")
 
 	}
 
