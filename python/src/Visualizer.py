@@ -120,8 +120,8 @@ print "Average Understanding Score: " + str(avgX)
 print "Average Engagement Score: " + str(avgY)
 print "Increments are " + str(increment) + " seconds"
 
-trace0 = Scatter(x=times, y=Xlist);          
-trace1 = Scatter(x=times, y=Ylist);  
+trace0 = Scatter(x=times, y=Xlist, name="Engaged");
+trace1 = Scatter(x=times, y=Ylist, name="Understood");
 
 data = Data([trace0, trace1])
 
